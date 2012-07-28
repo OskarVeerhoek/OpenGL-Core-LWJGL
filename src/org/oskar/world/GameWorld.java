@@ -91,7 +91,7 @@ public class GameWorld {
         BasicConfigurator.configure();
         info(GameWorld.class, "Creating game world");
         debug(GameWorld.class, "Setting properties");
-        setProperty("WINDOW_TITLE", "Game Coding Complete - Java w/ LWJGL");
+        setProperty("WINDOW_TITLE", "Core OpenGL - Java w/ LWJGL");
         setProperty("WINDOW_WIDTH", 640);
         setProperty("WINDOW_HEIGHT", 480);
         setProperty("RESOURCE_VERTEX_SHADER", "res/shader.vs");

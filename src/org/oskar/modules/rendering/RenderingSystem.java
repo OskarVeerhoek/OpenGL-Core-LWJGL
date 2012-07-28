@@ -7,6 +7,8 @@ import org.oskar.world.GameWorld;
 import java.io.File;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
+import java.nio.ShortBuffer;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL13.*;
@@ -25,6 +27,7 @@ public class RenderingSystem implements GameModule {
     private final int VERTEX_COLOUR = 1;
     private final int VERTEX_TEXTURE_COORDINATE = 2;
     private int vbo;
+    private int ibo;
     private int vao;
     private int vertexShader;
     private int fragmentShader;
@@ -32,6 +35,31 @@ public class RenderingSystem implements GameModule {
     private int sampleImage;
     public RenderingSystem() {
 
+    }
+
+    private ShortBuffer asShortBuffer(short[] values) {
+        ShortBuffer buffer = BufferUtils.createShortBuffer(values.length);
+        buffer.put(values);
+        return buffer;
+    }
+
+    private ShortBuffer asFlippedShortBuffer(short[] values) {
+        ShortBuffer buffer = BufferUtils.createShortBuffer(values.length);
+        buffer.put(values);
+        buffer.flip();
+        return buffer;
+    }
+
+    private IntBuffer asIntBuffer(int[] values) {
+        IntBuffer buffer = BufferUtils.createIntBuffer(values.length);
+        buffer.put(values);
+        return buffer;
+    }
+
+    private IntBuffer asFlippedIntBuffer(int[] values) {
+        IntBuffer intBuffer = asIntBuffer(values);
+        intBuffer.flip();
+        return intBuffer;
     }
 
     private FloatBuffer asFloatBuffer(float[] values) {
@@ -73,6 +101,16 @@ public class RenderingSystem implements GameModule {
         gameWorld.debug(RenderingSystem.class, "Creating VAO");
         vao = glGenVertexArrays();
         glBindVertexArray(vao);
+        gameWorld.debug(RenderingSystem.class, "Creating IBO");
+        ibo = glGenBuffers();
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+        IntBuffer indexData = asIntBuffer(new int[]{
+                0, 1, 2,
+                0, 2, 3
+        });
+        indexData.flip();
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexData, GL_STATIC_DRAW);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
         gameWorld.debug(RenderingSystem.class, "Creating VBO");
         vbo = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
@@ -81,22 +119,25 @@ public class RenderingSystem implements GameModule {
                 -1.0f, -1.0f,
                 +1.0f, -1.0f,
                 +1.0f, +1.0f,
+                -1.0f, +1.0f,
             // Colours
                 +1.0f, +0.0f, +0.0f,
                 +0.0f, +1.0f, +0.0f,
                 +0.0f, +0.0f, +1.0f,
+                +1.0f, +1.0f, +1.0f
             // Texture Coordinates
                 +0.0f, +0.0f,
                 +1.0f, +0.0f,
-                +1.0f, +1.0f
+                +1.0f, +1.0f,
+                +0.0f, +1.0f,
         });
         glBufferData(GL_ARRAY_BUFFER, vertexData, GL_STATIC_DRAW);
         glEnableVertexAttribArray(VERTEX_POSITION);
         glEnableVertexAttribArray(VERTEX_COLOUR);
         glEnableVertexAttribArray(VERTEX_TEXTURE_COORDINATE);
         glVertexAttribPointer(VERTEX_POSITION, 2, GL_FLOAT, false, 0, 0);
-        glVertexAttribPointer(VERTEX_COLOUR, 3, GL_FLOAT, false, 0, 24);
-        glVertexAttribPointer(VERTEX_TEXTURE_COORDINATE, 2, GL_FLOAT, false, 0, 50);
+        glVertexAttribPointer(VERTEX_COLOUR, 3, GL_FLOAT, false, 0, 32);
+        glVertexAttribPointer(VERTEX_TEXTURE_COORDINATE, 2, GL_FLOAT, false, 0, 80);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindVertexArray(0);
         checkForErrors();
@@ -148,7 +189,6 @@ public class RenderingSystem implements GameModule {
         this.gameWorld = gameWorld;
         gameWorld.debug(RenderingSystem.class, "Checking OpenGL version");
         if (glGetString(GL_VERSION).startsWith("3.2")) {
-            // TODO: Optimize glGetString calls
             gameWorld.debug(RenderingSystem.class, "OpenGL version is correct: " + glGetString(GL_VERSION));
         } else {
             gameWorld.fatal(RenderingSystem.class, "Wrong OpenGL version: " + glGetString(GL_VERSION));
@@ -167,6 +207,10 @@ public class RenderingSystem implements GameModule {
         gameWorld.debug(RenderingSystem.class, "Destroying VBO");
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glDeleteBuffers(vbo);
+        checkForErrors();
+        gameWorld.debug(RenderingSystem.class, "Destroying IBO");
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+        glDeleteBuffers(ibo);
         checkForErrors();
         gameWorld.debug(RenderingSystem.class, "Destroying shader program");
         glUseProgram(0);
@@ -189,16 +233,26 @@ public class RenderingSystem implements GameModule {
         return gameWorld;
     }
 
+    private boolean firstRender = true;
+
     public void update() {
+        if (true == firstRender) {
+            gameWorld.info(RenderingSystem.class, "Rendering to screen");
+            firstRender = false;
+        }
         glClear(GL_COLOR_BUFFER_BIT);
         glBindVertexArray(vao);
         glUseProgram(shaderProgram);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
         glBindTexture(GL_TEXTURE_2D, sampleImage);
-        glDrawArrays(GL_TRIANGLES, 0, 6);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        checkForErrors();
+        //glDrawArrays(GL_TRIANGLES, 0, 6);
         glBindTexture(GL_TEXTURE_2D, 0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
         glUseProgram(0);
         glBindVertexArray(0);
-        checkForErrors();
+        glGetError();
     }
 
 }
