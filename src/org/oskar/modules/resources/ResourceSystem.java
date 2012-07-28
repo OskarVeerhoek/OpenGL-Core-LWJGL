@@ -1,12 +1,12 @@
 package org.oskar.modules.resources;
 
+import de.matthiasmann.twl.utils.PNGDecoder;
+import org.lwjgl.BufferUtils;
 import org.oskar.modules.GameModule;
 import org.oskar.world.GameWorld;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,8 +22,27 @@ public class ResourceSystem implements GameModule {
         return textFiles.get(key);
     }
 
+    public ByteBuffer loadImage(File file) {
+        gameWorld.debug(ResourceSystem.class, "Loading image file " + file.getName());
+        if (!file.getName().endsWith("png")) {
+            gameWorld.error(ResourceSystem.class, "File is not a PNG file");
+            return null;
+        }
+        try {
+            PNGDecoder decoder = new PNGDecoder(new FileInputStream(file));
+            gameWorld.setProperty("RESOURCE_" + file.getName() + "_WIDTH", decoder.getWidth());
+            gameWorld.setProperty("RESOURCE_" + file.getName() + "_HEIGHT", decoder.getHeight());
+            ByteBuffer imageData = BufferUtils.createByteBuffer(4 * decoder.getWidth() * decoder.getHeight());
+            decoder.decode(imageData, decoder.getWidth() * 4, PNGDecoder.Format.RGBA);
+            return imageData;
+        } catch (IOException e) {
+            gameWorld.error(ResourceSystem.class, e);
+        }
+        return null;
+    }
+
     public String loadFileToString(File file) {
-        gameWorld.getLoggingSystem().debug(ResourceSystem.class, "Loading " + file.toString() + " to string");
+        gameWorld.debug(ResourceSystem.class, "Loading " + file.toString() + " to string");
         StringBuilder fileSource = new StringBuilder();
         try {
             BufferedReader reader = new BufferedReader(new FileReader(
@@ -34,14 +53,14 @@ public class ResourceSystem implements GameModule {
             }
             reader.close();
         } catch (IOException e) {
-            gameWorld.getLoggingSystem().fatal(ResourceSystem.class, e);
+            gameWorld.fatal(ResourceSystem.class, e);
         }
         return fileSource.toString();
     }
 
     @Override
     public void create(GameWorld gameWorld) {
-        gameWorld.getLoggingSystem().info(ResourceSystem.class, "Creating resource system");
+        gameWorld.info(ResourceSystem.class, "Creating resource system");
         this.gameWorld = gameWorld;
         textFiles.put("RESOURCE_VERTEX_SHADER", loadFileToString(new File(gameWorld.getStringProperty("RESOURCE_VERTEX_SHADER"))));
         textFiles.put("RESOURCE_FRAGMENT_SHADER", loadFileToString(new File(gameWorld.getStringProperty("RESOURCE_FRAGMENT_SHADER"))));
@@ -49,7 +68,7 @@ public class ResourceSystem implements GameModule {
 
     @Override
     public void destroy() {
-        gameWorld.getLoggingSystem().info(ResourceSystem.class, "Destroying resource system");
+        gameWorld.info(ResourceSystem.class, "Destroying resource system");
     }
 
     @Override

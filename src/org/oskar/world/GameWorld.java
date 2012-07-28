@@ -1,7 +1,8 @@
 package org.oskar.world;
 
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Logger;
 import org.oskar.modules.file.FileSystem;
-import org.oskar.modules.logging.LoggingSystem;
 import org.oskar.modules.rendering.RenderingSystem;
 import org.oskar.modules.resources.ResourceSystem;
 import org.oskar.modules.window.WindowingSystem;
@@ -20,7 +21,6 @@ public class GameWorld {
     private RenderingSystem renderingSystem = new RenderingSystem();
     private FileSystem fileSystem = new FileSystem();
     private ResourceSystem resourceSystem = new ResourceSystem();
-    private LoggingSystem loggingSystem = new LoggingSystem();
     private Properties properties = new Properties();
     private Map<String, String> stringProperties = new HashMap<String, String>();
     private Map<String, Integer> integerProperties = new HashMap<String, Integer>();
@@ -40,23 +40,63 @@ public class GameWorld {
     }
 
     public void destroy() {
-        loggingSystem.info(GameWorld.class, "Destroying game world");
+        info(GameWorld.class, "Destroying game world");
         renderingSystem.destroy();
         windowingSystem.destroy();
         resourceSystem.destroy();
         fileSystem.destroy();
-        loggingSystem.destroy();
+    }
+
+    public void debug(Class sender, String log) {
+        Logger.getLogger(sender).debug(log);
+    }
+
+    public void info(Class sender, String log) {
+        Logger.getLogger(sender).info(log);
+    }
+
+    public void warn(Class sender, String log) {
+        Logger.getLogger(sender).warn(log);
+    }
+
+    public void fatal(Class sender, Exception e) {
+        Logger.getLogger(sender).fatal("", e);
+        setFlaggedForDestruction(true);
+    }
+
+    public void fatal(Class sender, String log, Exception e) {
+        Logger.getLogger(sender).fatal(log, e);
+        setFlaggedForDestruction(true);
+    }
+
+    public void fatal(Class sender, String log) {
+        Logger.getLogger(sender).fatal(log);
+        setFlaggedForDestruction(true);
+    }
+
+    public void error(Class sender, Exception e) {
+        Logger.getLogger(sender).error("", e);
+    }
+
+    public void error(Class sender, String log, Exception e) {
+        Logger.getLogger(sender).error(log, e);
+    }
+
+    public void error(Class sender, String log) {
+        Logger.getLogger(sender).error(log);
     }
 
     public void create() {
-        loggingSystem.create(this);
-        loggingSystem.info(GameWorld.class, "Creating game world");
-        loggingSystem.debug(GameWorld.class, "Setting properties");
+        info(GameWorld.class, "Creating logging system");
+        BasicConfigurator.configure();
+        info(GameWorld.class, "Creating game world");
+        debug(GameWorld.class, "Setting properties");
         setProperty("WINDOW_TITLE", "Game Coding Complete - Java w/ LWJGL");
         setProperty("WINDOW_WIDTH", 640);
         setProperty("WINDOW_HEIGHT", 480);
         setProperty("RESOURCE_VERTEX_SHADER", "res/shader.vs");
         setProperty("RESOURCE_FRAGMENT_SHADER", "res/shader.fs");
+        setProperty("RESOURCE_SAMPLE_IMAGE", "res/sample.png");
         fileSystem.create(this);
         resourceSystem.create(this);
         windowingSystem.create(this);
@@ -64,12 +104,15 @@ public class GameWorld {
     }
 
     public void setProperty(String key, String value) {
-        loggingSystem.debug(GameWorld.class, "Setting " + key + " to " + value);
+        debug(GameWorld.class, "Setting " + key + " to " + value);
+        if (!stringProperties.containsKey(key)) {
+
+        }
         stringProperties.put(key, value);
     }
 
     public void setProperty(String key, Integer value) {
-        loggingSystem.debug(GameWorld.class, "Setting " + key + " to " + value);
+        debug(GameWorld.class, "Setting " + key + " to " + value);
         integerProperties.put(key, value);
     }
 
@@ -95,10 +138,6 @@ public class GameWorld {
 
     public ResourceSystem getResourceSystem() {
         return resourceSystem;
-    }
-
-    public LoggingSystem getLoggingSystem() {
-        return loggingSystem;
     }
 
     public void run() {

@@ -20,26 +20,26 @@ public class WindowingSystem implements GameModule {
     @Override
     public void create(GameWorld gameWorld) {
         this.gameWorld = gameWorld;
-        this.gameWorld.getLoggingSystem().info(WindowingSystem.class, "Creating windowing system");
+        this.gameWorld.info(WindowingSystem.class, "Creating windowing system");
         try {
-            this.gameWorld.getLoggingSystem().debug(WindowingSystem.class, "Setting display mode to WINDOW_WIDTH, WINDOW_HEIGHT");
+            this.gameWorld.debug(WindowingSystem.class, "Setting display mode to WINDOW_WIDTH, WINDOW_HEIGHT");
             Display.setDisplayMode(new DisplayMode(gameWorld.getIntegerProperty("WINDOW_WIDTH"), gameWorld.getIntegerProperty("WINDOW_HEIGHT")));
-            this.gameWorld.getLoggingSystem().debug(WindowingSystem.class, "Enabling VSync");
+            this.gameWorld.debug(WindowingSystem.class, "Enabling VSync");
             Display.setVSyncEnabled(true);
-            this.gameWorld.getLoggingSystem().debug(WindowingSystem.class, "Setting window title to WINDOW_TITLE");
+            this.gameWorld.debug(WindowingSystem.class, "Setting window title to WINDOW_TITLE");
             Display.setTitle(gameWorld.getStringProperty("WINDOW_TITLE"));
-            this.gameWorld.getLoggingSystem().debug(WindowingSystem.class, "Creating a display with a 3.2 OpenGL core profile context");
+            this.gameWorld.debug(WindowingSystem.class, "Creating a display with a 3.2 OpenGL core profile context");
             Display.create(new PixelFormat(), new ContextAttribs(3, 2).withForwardCompatible(true));
         } catch (LWJGLException e) {
-            this.gameWorld.getLoggingSystem().fatal(WindowingSystem.class, e);
+            this.gameWorld.fatal(WindowingSystem.class, e);
             e.printStackTrace();
         }
     }
 
     @Override
     public void destroy() {
-        gameWorld.getLoggingSystem().info(WindowingSystem.class, "Destroying windowing system");
-        gameWorld.getLoggingSystem().debug(WindowingSystem.class, "Destroying display");
+        gameWorld.info(WindowingSystem.class, "Destroying windowing system");
+        gameWorld.debug(WindowingSystem.class, "Destroying display");
         Display.destroy();
     }
 
