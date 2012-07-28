@@ -1,13 +1,13 @@
 #version 150 core
 
 layout(location = 0) in vec4 vertex_position;
-layout(location = 1) in vec4 vertex_colour;
-layout(location = 2) in vec4 vertex_texture_coordinate;
+layout(location = 1) in vec3 vertex_colour;
+layout(location = 2) in vec2 vertex_texture_coordinate;
 
 uniform sampler2D texture;
 
-smooth out vec4 fragment_texture_coordinate;
-smooth out vec4 fragment_colour;
+smooth out vec2 fragment_texture_coordinate;
+smooth out vec3 fragment_colour;
 
 void main()
 {
