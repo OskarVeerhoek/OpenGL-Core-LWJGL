@@ -1,11 +1,12 @@
 package org.oskar.world;
 
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Logger;
+import org.apache.log4j.*;
+import org.apache.log4j.xml.DOMConfigurator;
 import org.oskar.modules.file.FileSystem;
 import org.oskar.modules.rendering.RenderingSystem;
 import org.oskar.modules.resources.ResourceSystem;
 import org.oskar.modules.window.WindowingSystem;
+import org.w3c.dom.DOMConfiguration;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -105,9 +106,6 @@ public class GameWorld {
 
     public void setProperty(String key, String value) {
         debug(GameWorld.class, "Setting " + key + " to " + value);
-        if (!stringProperties.containsKey(key)) {
-
-        }
         stringProperties.put(key, value);
     }
 
@@ -117,11 +115,21 @@ public class GameWorld {
     }
 
     public Integer getIntegerProperty(String key) {
-        return integerProperties.get(key);
+        if (!integerProperties.containsKey(key)) {
+            error(GameWorld.class, "Key " + key + " does not exist.");
+            return null;
+        } else {
+            return integerProperties.get(key);
+        }
     }
 
     public String getStringProperty(String key) {
-        return stringProperties.get(key);
+        if (!stringProperties.containsKey(key)) {
+            error(GameWorld.class, "Key " + key + " does not exist.");
+            return null;
+        } else {
+            return stringProperties.get(key);
+        }
     }
 
     public boolean isCreated() {

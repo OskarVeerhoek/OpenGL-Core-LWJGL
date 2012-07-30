@@ -152,7 +152,6 @@ public class RenderingSystem implements GameModule {
             gameWorld.debug(RenderingSystem.class, "OpenGL vertex shader info log: " + glGetShaderInfoLog(fragmentShader, 2056));
             gameWorld.setFlaggedForDestruction(true);
         }
-        gameWorld.debug(RenderingSystem.class, "OpenGL vertex shader info log: " + glGetShaderInfoLog(vertexShader, 2056));
         fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
         glShaderSource(fragmentShader, gameWorld.getResourceSystem().getTextFileContent("RESOURCE_FRAGMENT_SHADER"));
         glCompileShader(fragmentShader);
@@ -164,30 +163,17 @@ public class RenderingSystem implements GameModule {
         glAttachShader(shaderProgram, vertexShader);
         glAttachShader(shaderProgram, fragmentShader);
         glLinkProgram(shaderProgram);
+        if (glGetProgram(shaderProgram, GL_LINK_STATUS) == GL_FALSE) {
+            gameWorld.debug(RenderingSystem.class, "OpenGL shader program info log: " + glGetProgramInfoLog(shaderProgram, 2056));
+            gameWorld.setFlaggedForDestruction(true);
+        }
         glUseProgram(shaderProgram);
         gameWorld.debug(RenderingSystem.class, "Setting \"texture\" uniform to 0");
         glActiveTexture(GL_TEXTURE0);
         glUniform1i(glGetUniformLocation(shaderProgram, "texture"), 0);
         glValidateProgram(shaderProgram);
-        gameWorld.debug(RenderingSystem.class, "OpenGL shader program info log: " + glGetProgramInfoLog(shaderProgram, 2056));
         glUseProgram(0);
         checkForErrors();
-    }
-
-    public void createTextures() {
-        gameWorld.debug(RenderingSystem.class, "Creating textures");
-        glActiveTexture(GL_TEXTURE0);
-        sampleImage = glGenTextures();
-        glBindTexture(GL_TEXTURE_2D, sampleImage);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        String imagePath = gameWorld.getStringProperty("RESOURCE_SAMPLE_IMAGE");
-        ByteBuffer imageData = gameWorld.getResourceSystem().loadImage(new File(imagePath));
-        imageData.flip();
-        int width = gameWorld.getIntegerProperty("RESOURCE_sample.png_WIDTH");
-        int height = gameWorld.getIntegerProperty("RESOURCE_sample.png_HEIGHT");
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageData);
-        glBindTexture(GL_TEXTURE_2D, 0);
     }
 
     @Override
@@ -202,15 +188,11 @@ public class RenderingSystem implements GameModule {
         }
         createBuffers();
         createShaders();
-        createTextures();
     }
 
     @Override
     public void destroy() {
         gameWorld.info(RenderingSystem.class, "Destroying rendering system");
-        gameWorld.debug(RenderingSystem.class, "Destroying textures");
-        glBindTexture(GL_TEXTURE_2D, 0);
-        glDeleteTextures(sampleImage);
         gameWorld.debug(RenderingSystem.class, "Destroying VBO");
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glDeleteBuffers(vbo);
@@ -240,13 +222,7 @@ public class RenderingSystem implements GameModule {
         return gameWorld;
     }
 
-    private boolean firstRender = true;
-
     public void update() {
-        if (true == firstRender) {
-            gameWorld.info(RenderingSystem.class, "Rendering to screen");
-            firstRender = false;
-        }
         glClear(GL_COLOR_BUFFER_BIT);
         glBindVertexArray(vao);
         glUseProgram(shaderProgram);

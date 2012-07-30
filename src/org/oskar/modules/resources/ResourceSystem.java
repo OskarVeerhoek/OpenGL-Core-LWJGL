@@ -2,6 +2,7 @@ package org.oskar.modules.resources;
 
 import de.matthiasmann.twl.utils.PNGDecoder;
 import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.GL11;
 import org.oskar.modules.GameModule;
 import org.oskar.world.GameWorld;
 
@@ -9,6 +10,8 @@ import java.io.*;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
+
+import static org.lwjgl.opengl.GL11.*;
 
 /**
  * @author Oskar Veerhoek
@@ -22,23 +25,26 @@ public class ResourceSystem implements GameModule {
         return textFiles.get(key);
     }
 
-    public ByteBuffer loadImage(File file) {
+    public int loadImage(File file) {
         gameWorld.debug(ResourceSystem.class, "Loading image file " + file.getName());
         if (!file.getName().endsWith("png")) {
             gameWorld.error(ResourceSystem.class, "File is not a PNG file");
-            return null;
+            return 0;
         }
         try {
             PNGDecoder decoder = new PNGDecoder(new FileInputStream(file));
-            gameWorld.setProperty("RESOURCE_" + file.getName() + "_WIDTH", decoder.getWidth());
-            gameWorld.setProperty("RESOURCE_" + file.getName() + "_HEIGHT", decoder.getHeight());
             ByteBuffer imageData = BufferUtils.createByteBuffer(4 * decoder.getWidth() * decoder.getHeight());
             decoder.decode(imageData, decoder.getWidth() * 4, PNGDecoder.Format.RGBA);
-            return imageData;
+            int texture = GL11.glGenTextures();
+            glBindTexture(GL_TEXTURE_2D, texture);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, decoder.getWidth(), decoder.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, (ByteBuffer) imageData.flip());
+            glBindTexture(GL_TEXTURE_2D, 0);
         } catch (IOException e) {
             gameWorld.error(ResourceSystem.class, e);
         }
-        return null;
+        return 0;
     }
 
     public String loadFileToString(File file) {
