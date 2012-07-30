@@ -97,7 +97,6 @@ public class GameWorld {
         setProperty("WINDOW_HEIGHT", 480);
         setProperty("RESOURCE_VERTEX_SHADER", "res/shader.vs");
         setProperty("RESOURCE_FRAGMENT_SHADER", "res/shader.fs");
-        setProperty("RESOURCE_SAMPLE_IMAGE", "res/sample.png");
         fileSystem.create(this);
         resourceSystem.create(this);
         windowingSystem.create(this);

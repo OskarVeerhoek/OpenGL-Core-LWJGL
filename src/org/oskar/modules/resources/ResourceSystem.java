@@ -25,28 +25,6 @@ public class ResourceSystem implements GameModule {
         return textFiles.get(key);
     }
 
-    public int loadImage(File file) {
-        gameWorld.debug(ResourceSystem.class, "Loading image file " + file.getName());
-        if (!file.getName().endsWith("png")) {
-            gameWorld.error(ResourceSystem.class, "File is not a PNG file");
-            return 0;
-        }
-        try {
-            PNGDecoder decoder = new PNGDecoder(new FileInputStream(file));
-            ByteBuffer imageData = BufferUtils.createByteBuffer(4 * decoder.getWidth() * decoder.getHeight());
-            decoder.decode(imageData, decoder.getWidth() * 4, PNGDecoder.Format.RGBA);
-            int texture = GL11.glGenTextures();
-            glBindTexture(GL_TEXTURE_2D, texture);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, decoder.getWidth(), decoder.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, (ByteBuffer) imageData.flip());
-            glBindTexture(GL_TEXTURE_2D, 0);
-        } catch (IOException e) {
-            gameWorld.error(ResourceSystem.class, e);
-        }
-        return 0;
-    }
-
     public String loadFileToString(File file) {
         gameWorld.debug(ResourceSystem.class, "Loading " + file.toString() + " to string");
         StringBuilder fileSource = new StringBuilder();
