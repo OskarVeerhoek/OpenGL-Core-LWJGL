@@ -148,11 +148,18 @@ public class RenderingSystem implements GameModule {
         vertexShader = glCreateShader(GL_VERTEX_SHADER);
         glShaderSource(vertexShader, gameWorld.getResourceSystem().getTextFileContent("RESOURCE_VERTEX_SHADER"));
         glCompileShader(vertexShader);
+        if (glGetShader(vertexShader, GL_COMPILE_STATUS) == GL_FALSE) {
+            gameWorld.debug(RenderingSystem.class, "OpenGL vertex shader info log: " + glGetShaderInfoLog(fragmentShader, 2056));
+            gameWorld.setFlaggedForDestruction(true);
+        }
         gameWorld.debug(RenderingSystem.class, "OpenGL vertex shader info log: " + glGetShaderInfoLog(vertexShader, 2056));
         fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
         glShaderSource(fragmentShader, gameWorld.getResourceSystem().getTextFileContent("RESOURCE_FRAGMENT_SHADER"));
         glCompileShader(fragmentShader);
-        gameWorld.debug(RenderingSystem.class, "OpenGL fragment shader info log: " + glGetShaderInfoLog(fragmentShader, 2056));
+        if (glGetShader(fragmentShader, GL_COMPILE_STATUS) == GL_FALSE) {
+            gameWorld.debug(RenderingSystem.class, "OpenGL fragment shader info log: " + glGetShaderInfoLog(fragmentShader, 2056));
+            gameWorld.setFlaggedForDestruction(true);
+        }
         shaderProgram = glCreateProgram();
         glAttachShader(shaderProgram, vertexShader);
         glAttachShader(shaderProgram, fragmentShader);
@@ -246,13 +253,11 @@ public class RenderingSystem implements GameModule {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
         glBindTexture(GL_TEXTURE_2D, sampleImage);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-        checkForErrors();
-        //glDrawArrays(GL_TRIANGLES, 0, 6);
         glBindTexture(GL_TEXTURE_2D, 0);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
         glUseProgram(0);
         glBindVertexArray(0);
-        glGetError();
+        checkForErrors();
     }
 
 }

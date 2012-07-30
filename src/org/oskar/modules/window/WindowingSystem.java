@@ -29,7 +29,7 @@ public class WindowingSystem implements GameModule {
             this.gameWorld.debug(WindowingSystem.class, "Setting window title to WINDOW_TITLE");
             Display.setTitle(gameWorld.getStringProperty("WINDOW_TITLE"));
             this.gameWorld.debug(WindowingSystem.class, "Creating a display with a 3.2 OpenGL core profile context");
-            Display.create(new PixelFormat(), new ContextAttribs(3, 2).withForwardCompatible(true));
+            Display.create(new PixelFormat(), new ContextAttribs(3, 2).withDebug(true).withProfileCore(true));
         } catch (LWJGLException e) {
             this.gameWorld.fatal(WindowingSystem.class, e);
             e.printStackTrace();

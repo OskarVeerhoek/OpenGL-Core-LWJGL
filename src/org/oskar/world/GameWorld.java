@@ -61,17 +61,17 @@ public class GameWorld {
 
     public void fatal(Class sender, Exception e) {
         Logger.getLogger(sender).fatal("", e);
-        setFlaggedForDestruction(true);
+        destroy();
     }
 
     public void fatal(Class sender, String log, Exception e) {
         Logger.getLogger(sender).fatal(log, e);
-        setFlaggedForDestruction(true);
+        destroy();
     }
 
     public void fatal(Class sender, String log) {
         Logger.getLogger(sender).fatal(log);
-        setFlaggedForDestruction(true);
+        destroy();
     }
 
     public void error(Class sender, Exception e) {

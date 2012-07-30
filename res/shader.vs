@@ -6,12 +6,12 @@ layout(location = 2) in vec2 vertex_texture_coordinate;
 
 uniform sampler2D texture;
 
-smooth out vec2 fragment_texture_coordinate;
-smooth out vec3 fragment_colour;
+smooth out vec2 varying_texture_coordinate;
+smooth out vec3 varying_colour;
 
 void main()
 {
-    fragment_texture_coordinate = vertex_texture_coordinate;
-    fragment_colour = vertex_colour;
+    varying_texture_coordinate = vertex_texture_coordinate;
+    varying_colour = vertex_colour;
     gl_Position = vertex_position;
 }
