@@ -170,7 +170,8 @@ public class RenderingSystem implements GameModule {
         gameWorld.info(RenderingSystem.class, "Creating rendering system");
         this.gameWorld = gameWorld;
         gameWorld.debug(RenderingSystem.class, "Checking OpenGL version");
-        if (glGetString(GL_VERSION).startsWith("3.2")) {
+        double openglVersion = Double.parseDouble(glGetString(GL_VERSION).substring(0, 3));
+        if (openglVersion >= 3.2) {
             gameWorld.debug(RenderingSystem.class, "OpenGL version is correct: " + glGetString(GL_VERSION));
         } else {
             gameWorld.fatal(RenderingSystem.class, "Wrong OpenGL version: " + glGetString(GL_VERSION));
