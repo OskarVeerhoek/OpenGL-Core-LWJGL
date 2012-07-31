@@ -113,19 +113,23 @@ public class RenderingSystem implements GameModule {
         gameWorld.debug(RenderingSystem.class, "Creating VBO");
         vbo = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
-        FloatBuffer vertexData = asFlippedFloatBuffer(new float[] {
-            // Positions
+        FloatBuffer vertexPositionData = asFlippedFloatBuffer(new float[] {
                 -1.0f, -1.0f,
                 +1.0f, -1.0f,
                 +1.0f, +1.0f,
                 -1.0f, +1.0f,
-            // Colours
+        });
+        int vertexPositionDataSize = /* amount of elements */ 4 * /* amount of components */ 2 * /* size of float */ 4;
+        FloatBuffer vertexColourData = asFlippedFloatBuffer(new float[] {
                 +1.0f, +0.0f, +0.0f,
                 +0.0f, +1.0f, +0.0f,
                 +0.0f, +0.0f, +1.0f,
                 +1.0f, +1.0f, +1.0f
         });
-        glBufferData(GL_ARRAY_BUFFER, vertexData, GL_STATIC_DRAW);
+        int vertexColourDataSize = /* amount of elements */ 4 * /* amount of components */ 3 * /* size of float */ 4;
+        glBufferData(GL_ARRAY_BUFFER, vertexPositionDataSize + vertexColourDataSize, GL_STATIC_DRAW);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, vertexPositionData);
+        glBufferSubData(GL_ARRAY_BUFFER, vertexPositionDataSize, vertexColourData);
         glEnableVertexAttribArray(VERTEX_POSITION);
         glEnableVertexAttribArray(VERTEX_COLOUR);
         glVertexAttribPointer(VERTEX_POSITION, 2, GL_FLOAT, false, 0, 0);
