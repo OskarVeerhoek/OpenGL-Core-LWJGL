@@ -25,7 +25,6 @@ public class RenderingSystem implements GameModule {
     private GameWorld gameWorld;
     private final int VERTEX_POSITION = 0;
     private final int VERTEX_COLOUR = 1;
-    private final int VERTEX_TEXTURE_COORDINATE = 2;
     private int vbo;
     private int ibo;
     private int vao;
@@ -125,19 +124,12 @@ public class RenderingSystem implements GameModule {
                 +0.0f, +1.0f, +0.0f,
                 +0.0f, +0.0f, +1.0f,
                 +1.0f, +1.0f, +1.0f
-            // Texture Coordinates
-                +0.0f, +0.0f,
-                +1.0f, +0.0f,
-                +1.0f, +1.0f,
-                +0.0f, +1.0f,
         });
         glBufferData(GL_ARRAY_BUFFER, vertexData, GL_STATIC_DRAW);
         glEnableVertexAttribArray(VERTEX_POSITION);
         glEnableVertexAttribArray(VERTEX_COLOUR);
-        glEnableVertexAttribArray(VERTEX_TEXTURE_COORDINATE);
         glVertexAttribPointer(VERTEX_POSITION, 2, GL_FLOAT, false, 0, 0);
         glVertexAttribPointer(VERTEX_COLOUR, 3, GL_FLOAT, false, 0, 32);
-        glVertexAttribPointer(VERTEX_TEXTURE_COORDINATE, 2, GL_FLOAT, false, 0, 80);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindVertexArray(0);
         checkForErrors();
@@ -168,9 +160,6 @@ public class RenderingSystem implements GameModule {
             gameWorld.setFlaggedForDestruction(true);
         }
         glUseProgram(shaderProgram);
-        gameWorld.debug(RenderingSystem.class, "Setting \"texture\" uniform to 0");
-        glActiveTexture(GL_TEXTURE0);
-        glUniform1i(glGetUniformLocation(shaderProgram, "texture"), 0);
         glValidateProgram(shaderProgram);
         glUseProgram(0);
         checkForErrors();
@@ -227,9 +216,7 @@ public class RenderingSystem implements GameModule {
         glBindVertexArray(vao);
         glUseProgram(shaderProgram);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-        glBindTexture(GL_TEXTURE_2D, sampleImage);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-        glBindTexture(GL_TEXTURE_2D, 0);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
         glUseProgram(0);
         glBindVertexArray(0);
