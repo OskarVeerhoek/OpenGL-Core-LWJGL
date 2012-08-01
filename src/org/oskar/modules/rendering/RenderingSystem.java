@@ -207,23 +207,20 @@ public class RenderingSystem implements GameModule {
         glShaderSource(vertexShader, gameWorld.getResourceSystem().getTextFileContent("RESOURCE_VERTEX_SHADER"));
         glCompileShader(vertexShader);
         if (glGetShader(vertexShader, GL_COMPILE_STATUS) == GL_FALSE) {
-            gameWorld.debug(RenderingSystem.class, "OpenGL vertex shader info log: " + glGetShaderInfoLog(fragmentShader, 2056));
-            gameWorld.setFlaggedForDestruction(true);
+            gameWorld.fatal(RenderingSystem.class, "OpenGL vertex shader info log: " + glGetShaderInfoLog(fragmentShader, 2056));
         }
         fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
         glShaderSource(fragmentShader, gameWorld.getResourceSystem().getTextFileContent("RESOURCE_FRAGMENT_SHADER"));
         glCompileShader(fragmentShader);
         if (glGetShader(fragmentShader, GL_COMPILE_STATUS) == GL_FALSE) {
-            gameWorld.debug(RenderingSystem.class, "OpenGL fragment shader info log: " + glGetShaderInfoLog(fragmentShader, 2056));
-            gameWorld.setFlaggedForDestruction(true);
+            gameWorld.fatal(RenderingSystem.class, "OpenGL fragment shader info log: " + glGetShaderInfoLog(fragmentShader, 2056));
         }
         shaderProgram = glCreateProgram();
         glAttachShader(shaderProgram, vertexShader);
         glAttachShader(shaderProgram, fragmentShader);
         glLinkProgram(shaderProgram);
         if (glGetProgram(shaderProgram, GL_LINK_STATUS) == GL_FALSE) {
-            gameWorld.debug(RenderingSystem.class, "OpenGL shader program info log: " + glGetProgramInfoLog(shaderProgram, 2056));
-            gameWorld.setFlaggedForDestruction(true);
+            gameWorld.fatal(RenderingSystem.class, "OpenGL shader program info log: " + glGetProgramInfoLog(shaderProgram, 2056));
         }
         glUseProgram(shaderProgram);
         glValidateProgram(shaderProgram);
