@@ -30,6 +30,7 @@
 package org.oskar.modules.rendering;
 
 import org.lwjgl.BufferUtils;
+import org.lwjgl.input.Keyboard;
 import org.oskar.modules.GameModule;
 import org.oskar.world.GameWorld;
 
@@ -327,23 +328,26 @@ public class RenderingSystem implements GameModule {
     }
 
     public void update() {
-        // Clear the screen.
-        glClear(GL_COLOR_BUFFER_BIT);
-        // Bind the vertex array object so we can use the VertexAttribPointer calls.
-        glBindVertexArray(vao);
-        // Bind the shader program so we can use the shaders.
-        glUseProgram(shaderProgram);
-        // Bind the index buffer object so we can the indices we supplied with DrawElements.
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-        // Draw the two triangles.
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-        // Unbind the index buffer object.
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-        // Unbind the shader program.
-        glUseProgram(0);
-        // Unbind the vertex array object.
-        glBindVertexArray(0);
-        checkForErrors();
+        // Press space to stop rendering.
+        if (!gameWorld.getWindowingSystem().isKeyPressed(Keyboard.KEY_SPACE)) {
+            // Clear the screen.
+            glClear(GL_COLOR_BUFFER_BIT);
+            // Bind the vertex array object so we can use the VertexAttribPointer calls.
+            glBindVertexArray(vao);
+            // Bind the shader program so we can use the shaders.
+            glUseProgram(shaderProgram);
+            // Bind the index buffer object so we can the indices we supplied with DrawElements.
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+            // Draw the two triangles.
+            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+            // Unbind the index buffer object.
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+            // Unbind the shader program.
+            glUseProgram(0);
+            // Unbind the vertex array object.
+            glBindVertexArray(0);
+            checkForErrors();
+        }
     }
 
 }
