@@ -89,7 +89,7 @@ public class GameWorld {
      */
     public void fatal(Class sender, Exception e) {
         Logger.getLogger(sender).fatal("", e);
-        destroy();
+        setFlaggedForDestruction(true);
     }
 
     /**
@@ -100,7 +100,7 @@ public class GameWorld {
      */
     public void fatal(Class sender, String log, Exception e) {
         Logger.getLogger(sender).fatal(log, e);
-        destroy();
+        setFlaggedForDestruction(true);
     }
 
     /**
@@ -110,7 +110,7 @@ public class GameWorld {
      */
     public void fatal(Class sender, String log) {
         Logger.getLogger(sender).fatal(log);
-        destroy();
+        setFlaggedForDestruction(true);
     }
 
     /**
