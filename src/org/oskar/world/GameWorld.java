@@ -142,15 +142,13 @@ public class GameWorld {
     }
 
     /**
-     * Sets the appropriate properties and initializes the logging system and the following modules:
+     * Sets the appropriate properties and initializes the following modules:
      * - File System
      * - Resource System
      * - Windowing System
      * - Rendering System
      */
     public void create() {
-        info(GameWorld.class, "Creating logging system");
-        BasicConfigurator.configure();
         info(GameWorld.class, "Creating game world");
         debug(GameWorld.class, "Setting properties");
         setProperty("WINDOW_TITLE", "Core OpenGL - Java w/ LWJGL");
