@@ -328,11 +328,10 @@ public class RenderingSystem implements GameModule {
     }
 
     public void update() {
-        // Press space to stop rendering.
-        if (!gameWorld.getWindowingSystem().isKeyPressed(Keyboard.KEY_SPACE)) {
-            // Clear the screen.
-            glClear(GL_COLOR_BUFFER_BIT);
-            // Bind the vertex array object so we can use the VertexAttribPointer calls.
+        // Clear the screen.
+        glClear(GL_COLOR_BUFFER_BIT);
+        // Press space or left button to stop rendering.\
+        if (!gameWorld.getWindowingSystem().isKeyPressed(Keyboard.KEY_SPACE) && !gameWorld.getWindowingSystem().isMouseButtonDown(0)) {
             glBindVertexArray(vao);
             // Bind the shader program so we can use the shaders.
             glUseProgram(shaderProgram);

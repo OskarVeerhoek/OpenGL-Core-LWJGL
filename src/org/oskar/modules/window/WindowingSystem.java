@@ -31,7 +31,15 @@ package org.oskar.modules.window;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
+<<<<<<< HEAD
 import org.lwjgl.opengl.*;
+=======
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.ContextAttribs;
+import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.DisplayMode;
+import org.lwjgl.opengl.PixelFormat;
+>>>>>>> added mouse input
 import org.oskar.modules.GameModule;
 import org.oskar.world.GameWorld;
 
@@ -68,6 +76,10 @@ public class WindowingSystem implements GameModule {
 
     public boolean isKeyPressed(int key) {
         return Keyboard.isKeyDown(key);
+    }
+
+    public boolean isMouseButtonDown(int mouseButton) {
+        return Mouse.isButtonDown(mouseButton);
     }
 
     @Override
