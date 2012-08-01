@@ -30,6 +30,7 @@
 package org.oskar.modules.window;
 
 import org.lwjgl.LWJGLException;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.*;
 import org.oskar.modules.GameModule;
 import org.oskar.world.GameWorld;
@@ -63,6 +64,23 @@ public class WindowingSystem implements GameModule {
             e.printStackTrace();
         }
         this.gameWorld.info(WindowingSystem.class, "Done creating windowing system");
+    }
+
+    public boolean isKeyPressed(int key) {
+        return Keyboard.isKeyDown(key);
+    }
+
+    public boolean isKeyCharPressed(char input) {
+        char key = Character.toLowerCase(input);
+        if ('a' == key) {
+            return isKeyPressed(Keyboard.KEY_A);
+        } else if ('b' == key) {
+            return isKeyPressed(Keyboard.KEY_B);
+        } else if ('c' == key) {
+            return isKeyPressed(Keyboard.KEY_C);
+        }
+        // TODO: Add more keys
+        return false;
     }
 
     @Override
