@@ -231,6 +231,10 @@ public class GameWorld {
         return fileSystem;
     }
 
+    public WindowingSystem getWindowingSystem() {
+        return windowingSystem;
+    }
+
     public ResourceSystem getResourceSystem() {
         return resourceSystem;
     }
