@@ -70,19 +70,6 @@ public class WindowingSystem implements GameModule {
         return Keyboard.isKeyDown(key);
     }
 
-    public boolean isKeyCharPressed(char input) {
-        char key = Character.toLowerCase(input);
-        if ('a' == key) {
-            return isKeyPressed(Keyboard.KEY_A);
-        } else if ('b' == key) {
-            return isKeyPressed(Keyboard.KEY_B);
-        } else if ('c' == key) {
-            return isKeyPressed(Keyboard.KEY_C);
-        }
-        // TODO: Add more keys
-        return false;
-    }
-
     @Override
     public void destroy() {
         gameWorld.info(WindowingSystem.class, "Destroying windowing system");
