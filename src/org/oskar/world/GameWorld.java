@@ -163,7 +163,7 @@ public class GameWorld {
     }
 
     public void setProperty(String key, String value) {
-        debug(GameWorld.class, "Setting " + key + " to " + value);
+        debug(GameWorld.class, "Setting " + key + " to \"" + value + "\"");
         stringProperties.put(key, value);
     }
 
