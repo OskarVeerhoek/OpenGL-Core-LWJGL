@@ -36,57 +36,118 @@ public class GameWorld {
         return flaggedForDestruction.get();
     }
 
+    /**
+     * Sets the "created" state to true.
+     */
     public GameWorld() {
         isCreated = true;
     }
 
+    /**
+     * Destroys all the modules that the game world uses.
+     */
     public void destroy() {
         info(GameWorld.class, "Destroying game world");
         renderingSystem.destroy();
         windowingSystem.destroy();
         resourceSystem.destroy();
         fileSystem.destroy();
+        isCreated = false;
     }
 
+    /**
+     * Prints out a debug log.
+     * @param sender the class from which the log is sent
+     * @param log the contents of the log
+     */
     public void debug(Class sender, String log) {
         Logger.getLogger(sender).debug(log);
     }
 
+    /**
+     * Prints out an info log.
+     * @param sender the class from which the log is sent
+     * @param log the contents of the log
+     */
     public void info(Class sender, String log) {
         Logger.getLogger(sender).info(log);
     }
 
+    /**
+     * Prints out a warning log.
+     * @param sender the class from which the log is sent
+     * @param log the contents of the log
+     */
     public void warn(Class sender, String log) {
         Logger.getLogger(sender).warn(log);
     }
 
+    /**
+     * Prints out a fatal exception and destroys the game world.
+     * @param sender the class from which the log is sent
+     * @param e the exception that occurred
+     */
     public void fatal(Class sender, Exception e) {
         Logger.getLogger(sender).fatal("", e);
         destroy();
     }
 
+    /**
+     * Prints out a fatal exception with a log and destroys the game world.
+     * @param sender the class from which the log was sent
+     * @param log the contents of the log
+     * @param e the exception that occurred
+     */
     public void fatal(Class sender, String log, Exception e) {
         Logger.getLogger(sender).fatal(log, e);
         destroy();
     }
 
+    /**
+     * Prints out a fatal log and destroys the game world.
+     * @param sender the class from which the log was sent
+     * @param log the contents of the log
+     */
     public void fatal(Class sender, String log) {
         Logger.getLogger(sender).fatal(log);
         destroy();
     }
 
+    /**
+     * Prints out an exception.
+     * @param sender the class from which the log is sent
+     * @param e the exception that occurred
+     */
     public void error(Class sender, Exception e) {
         Logger.getLogger(sender).error("", e);
     }
 
+    /**
+     * Prints out an exception with a log.
+     * @param sender the class from which the log is sent
+     * @param log the contents of the log
+     * @param e the exception that occurred
+     */
     public void error(Class sender, String log, Exception e) {
         Logger.getLogger(sender).error(log, e);
     }
 
+    /**
+     * Prints out an error log.
+     * @param sender the class from which the log is sent
+     * @param log the contents of the log
+     */
     public void error(Class sender, String log) {
         Logger.getLogger(sender).error(log);
     }
 
+    /**
+     * Sets the appropriate properties and initializes the logging system and the following modules:
+     * - File System
+     * - Resource System
+     * - Windowing System
+     * - Rendering System
+     */
     public void create() {
         info(GameWorld.class, "Creating logging system");
         BasicConfigurator.configure();
