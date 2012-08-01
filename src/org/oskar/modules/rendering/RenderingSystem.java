@@ -23,7 +23,13 @@ import static org.lwjgl.opengl.GL30.*;
  */
 public class RenderingSystem implements GameModule {
     private GameWorld gameWorld;
+    /**
+     * The vertex attribute position for the vertex position.
+     */
     private final int VERTEX_POSITION = 0;
+    /**
+     * The vertex attribute position for the vertex colour.
+     */
     private final int VERTEX_COLOUR = 1;
     private int vbo;
     private int ibo;
@@ -31,7 +37,6 @@ public class RenderingSystem implements GameModule {
     private int vertexShader;
     private int fragmentShader;
     private int shaderProgram;
-    private int sampleImage;
     public RenderingSystem() {
 
     }
@@ -73,6 +78,9 @@ public class RenderingSystem implements GameModule {
         return floatBuffer;
     }
 
+    /**
+     * Check for OpenGL errors. Prints them to the GameWorld logger if the occur.
+     */
     private void checkForErrors() {
         int error = glGetError();
         switch (error) {
