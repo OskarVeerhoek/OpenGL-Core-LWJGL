@@ -142,7 +142,7 @@ public class GameWorld {
     }
 
     /**
-     * Sets the appropriate properties and initializes the following modules:
+     * Sets the appropriate properties and initialises the following modules:
      * - File System
      * - Resource System
      * - Windowing System
