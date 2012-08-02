@@ -228,6 +228,34 @@ public class RenderingSystem implements GameModule {
         checkForErrors();
     }
 
+    private void destroyBuffers() {
+        gameWorld.debug(RenderingSystem.class, "Destroying VBO");
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glDeleteBuffers(vbo);
+        checkForErrors();
+        gameWorld.debug(RenderingSystem.class, "Destroying IBO");
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+        glDeleteBuffers(ibo);
+        checkForErrors();
+        gameWorld.debug(RenderingSystem.class, "Destroying VAO");
+        glBindVertexArray(0);
+        glDeleteVertexArrays(vao);
+        checkForErrors();
+    }
+
+    private void destroyShaders() {
+        gameWorld.debug(RenderingSystem.class, "Destroying shader program");
+        glUseProgram(0);
+        glDeleteProgram(shaderProgram);
+        checkForErrors();
+        gameWorld.debug(RenderingSystem.class, "Destroying vertex shader");
+        glDeleteShader(vertexShader);
+        checkForErrors();
+        gameWorld.debug(RenderingSystem.class, "Destroing fragment shader");
+        glDeleteShader(fragmentShader);
+        checkForErrors();
+    }
+
     @Override
     public void create(GameWorld gameWorld) {
         gameWorld.info(RenderingSystem.class, "Creating rendering system");
@@ -239,35 +267,15 @@ public class RenderingSystem implements GameModule {
         } else {
             gameWorld.fatal(RenderingSystem.class, "Wrong OpenGL version: " + glGetString(GL_VERSION));
         }
-        createBuffers();
         createShaders();
+        createBuffers();
     }
 
     @Override
     public void destroy() {
         gameWorld.info(RenderingSystem.class, "Destroying rendering system");
-        gameWorld.debug(RenderingSystem.class, "Destroying VBO");
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glDeleteBuffers(vbo);
-        checkForErrors();
-        gameWorld.debug(RenderingSystem.class, "Destroying IBO");
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-        glDeleteBuffers(ibo);
-        checkForErrors();
-        gameWorld.debug(RenderingSystem.class, "Destroying shader program");
-        glUseProgram(0);
-        glDeleteProgram(shaderProgram);
-        checkForErrors();
-        gameWorld.debug(RenderingSystem.class, "Destroying vertex shader");
-        glDeleteShader(vertexShader);
-        checkForErrors();
-        gameWorld.debug(RenderingSystem.class, "Destroing fragment shader");
-        glDeleteShader(fragmentShader);
-        checkForErrors();
-        gameWorld.debug(RenderingSystem.class, "Destroying VAO");
-        glBindVertexArray(0);
-        glDeleteVertexArrays(vao);
-        checkForErrors();
+        destroyBuffers();
+        destroyShaders();
     }
 
     @Override
