@@ -11,5 +11,6 @@ public class Main {
         gameWorld.create();
         gameWorld.run();
         gameWorld.destroy();
+        System.exit(0);
     }
 }
