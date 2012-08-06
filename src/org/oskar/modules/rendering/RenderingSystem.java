@@ -251,7 +251,7 @@ public class RenderingSystem implements GameModule {
         gameWorld.debug(RenderingSystem.class, "Destroying vertex shader");
         glDeleteShader(vertexShader);
         checkForErrors();
-        gameWorld.debug(RenderingSystem.class, "Destroing fragment shader");
+        gameWorld.debug(RenderingSystem.class, "Destroying fragment shader");
         glDeleteShader(fragmentShader);
         checkForErrors();
     }
@@ -269,6 +269,7 @@ public class RenderingSystem implements GameModule {
         }
         createShaders();
         createBuffers();
+        gameWorld.info(RenderingSystem.class, "Done creating rendering system");
     }
 
     @Override
@@ -276,6 +277,7 @@ public class RenderingSystem implements GameModule {
         gameWorld.info(RenderingSystem.class, "Destroying rendering system");
         destroyBuffers();
         destroyShaders();
+        gameWorld.info(RenderingSystem.class, "Done destroying rendering system");
     }
 
     @Override

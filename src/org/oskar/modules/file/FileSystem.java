@@ -8,17 +8,20 @@ import org.oskar.world.GameWorld;
  */
 public class FileSystem implements GameModule {
     private GameWorld gameWorld;
+
     public FileSystem() {}
 
     @Override
     public void create(GameWorld gameWorld) {
         gameWorld.info(FileSystem.class, "Creating file system");
         this.gameWorld = gameWorld;
+        gameWorld.info(FileSystem.class, "Done creating file system");
     }
 
     @Override
     public void destroy() {
         gameWorld.info(FileSystem.class, "Destroying file system");
+        gameWorld.info(FileSystem.class, "Done destroying file system");
     }
 
     @Override

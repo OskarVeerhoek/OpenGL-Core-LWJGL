@@ -33,6 +33,7 @@ public class WindowingSystem implements GameModule {
             this.gameWorld.fatal(WindowingSystem.class, e);
             e.printStackTrace();
         }
+        this.gameWorld.info(WindowingSystem.class, "Done creating windowing system");
     }
 
     @Override
@@ -40,6 +41,7 @@ public class WindowingSystem implements GameModule {
         gameWorld.info(WindowingSystem.class, "Destroying windowing system");
         gameWorld.debug(WindowingSystem.class, "Destroying display");
         Display.destroy();
+        gameWorld.info(WindowingSystem.class, "Done destroying windowing system");
     }
 
     @Override

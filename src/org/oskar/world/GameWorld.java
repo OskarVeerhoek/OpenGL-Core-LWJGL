@@ -53,6 +53,7 @@ public class GameWorld {
         resourceSystem.destroy();
         fileSystem.destroy();
         isCreated = false;
+        info(GameWorld.class, "Done destroying game world");
     }
 
     /**
@@ -160,6 +161,7 @@ public class GameWorld {
         resourceSystem.create(this);
         windowingSystem.create(this);
         renderingSystem.create(this);
+        info(GameWorld.class, "Done creating game world");
     }
 
     public void setProperty(String key, String value) {

@@ -48,11 +48,13 @@ public class ResourceSystem implements GameModule {
         this.gameWorld = gameWorld;
         textFiles.put("RESOURCE_VERTEX_SHADER", loadFileToString(new File(gameWorld.getStringProperty("RESOURCE_VERTEX_SHADER"))));
         textFiles.put("RESOURCE_FRAGMENT_SHADER", loadFileToString(new File(gameWorld.getStringProperty("RESOURCE_FRAGMENT_SHADER"))));
+        gameWorld.info(ResourceSystem.class, "Done creating resource system");
     }
 
     @Override
     public void destroy() {
         gameWorld.info(ResourceSystem.class, "Destroying resource system");
+        gameWorld.info(ResourceSystem.class, "Done destroying resource system");
     }
 
     @Override
