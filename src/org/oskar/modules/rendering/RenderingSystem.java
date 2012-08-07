@@ -57,11 +57,31 @@ public class RenderingSystem implements GameModule {
      * The vertex attribute position for the vertex colour.
      */
     private final int VERTEX_COLOUR = 1;
+    /**
+     * The vertex buffer object which will contain the vertex position
+     * and vertex colour data.
+     */
     private int vbo;
+    /**
+     * The index buffer object which will contain the indices that point
+     * to the data in the vertex buffer object.
+     */
     private int ibo;
+    /**
+     * The vertex array object that contain the vertex attribute pointers.
+     */
     private int vao;
+    /**
+     * The vertex shader that will process all the given vertices.
+     */
     private int vertexShader;
+    /**
+     * The fragment shader that will process all the given pixels (fragments).
+     */
     private int fragmentShader;
+    /**
+     * The shader program that will glue the vertex shader and the fragment shader together.
+     */
     private int shaderProgram;
 
     public RenderingSystem() {
@@ -72,6 +92,7 @@ public class RenderingSystem implements GameModule {
      * Check for OpenGL errors. Prints them to the GameWorld logger if they occur.
      */
     private void checkForErrors() {
+        // Retrieve the type of error from OpenGL.
         int error = glGetError();
         switch (error) {
             case GL_NO_ERROR:
