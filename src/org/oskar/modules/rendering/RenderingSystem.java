@@ -109,6 +109,7 @@ import static org.lwjgl.opengl.GL30.*;
  * @author Oskar Veerhoek
  */
 public class RenderingSystem implements GameModule {
+
     private GameWorld gameWorld;
     /**
      * The vertex attribute position for the vertex position.
@@ -124,49 +125,13 @@ public class RenderingSystem implements GameModule {
     private int vertexShader;
     private int fragmentShader;
     private int shaderProgram;
+
     public RenderingSystem() {
 
     }
 
-    private ShortBuffer asShortBuffer(short[] values) {
-        ShortBuffer buffer = BufferUtils.createShortBuffer(values.length);
-        buffer.put(values);
-        return buffer;
-    }
-
-    private ShortBuffer asFlippedShortBuffer(short[] values) {
-        ShortBuffer buffer = BufferUtils.createShortBuffer(values.length);
-        buffer.put(values);
-        buffer.flip();
-        return buffer;
-    }
-
-    private IntBuffer asIntBuffer(int[] values) {
-        IntBuffer buffer = BufferUtils.createIntBuffer(values.length);
-        buffer.put(values);
-        return buffer;
-    }
-
-    private IntBuffer asFlippedIntBuffer(int[] values) {
-        IntBuffer intBuffer = asIntBuffer(values);
-        intBuffer.flip();
-        return intBuffer;
-    }
-
-    private FloatBuffer asFloatBuffer(float[] values) {
-        FloatBuffer floatBuffer = BufferUtils.createFloatBuffer(values.length);
-        floatBuffer.put(values);
-        return floatBuffer;
-    }
-
-    private FloatBuffer asFlippedFloatBuffer(float[] values) {
-        FloatBuffer floatBuffer = asFloatBuffer(values);
-        floatBuffer.flip();
-        return floatBuffer;
-    }
-
     /**
-     * Check for OpenGL errors. Prints them to the GameWorld logger if the occur.
+     * Check for OpenGL errors. Prints them to the GameWorld logger if they occur.
      */
     private void checkForErrors() {
         int error = glGetError();
@@ -217,10 +182,12 @@ public class RenderingSystem implements GameModule {
         // Bind ibo to GL_ELEMENT_ARRAY_BUFFER.
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
         // Store the index data inside an IntBuffer and make it readable to OpenGL.
-        IntBuffer indexData = asFlippedIntBuffer(new int[]{
+        IntBuffer indexData = BufferUtils.createIntBuffer(6);
+        indexData.put(new int[]{
                 0, 1, 2,
                 0, 2, 3
         });
+        indexData.flip();
         // >> glBufferData creates a new data store for the buffer object currently bound
         // >> to target. Any pre-existing data store is deleted. The new data store is created
         // >> with the specified size in bytes and usage. If data is not NULL, the data
@@ -234,21 +201,25 @@ public class RenderingSystem implements GameModule {
         // Bind vbo to GL_ARRAY_BUFFER.
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
         // Store the vertex position data inside a FloatBuffer and make it readable to OpenGL.
-        FloatBuffer vertexPositionData = asFlippedFloatBuffer(new float[] {
+        FloatBuffer vertexPositionData = BufferUtils.createFloatBuffer(8);
+        vertexPositionData.put(new float[] {
                 -1.0f, -1.0f,
                 +1.0f, -1.0f,
                 +1.0f, +1.0f,
                 -1.0f, +1.0f,
         });
+        vertexPositionData.flip();
         // Calculate the size of the FloatBuffer in bytes.
         int vertexPositionDataSize = /* amount of elements */ 4 * /* amount of components */ 2 * /* size of float */ 4;
         // Store the vertex colour data inside a FloatBuffer and make it readable to OpenGL.
-        FloatBuffer vertexColourData = asFlippedFloatBuffer(new float[] {
+        FloatBuffer vertexColourData = BufferUtils.createFloatBuffer(12);
+        vertexColourData.put(new float[] {
                 +1.0f, +0.0f, +0.0f,
                 +0.0f, +1.0f, +0.0f,
                 +0.0f, +0.0f, +1.0f,
-                +1.0f, +1.0f, +1.0f
+                +1.0f, +1.0f, +1.0f,
         });
+        vertexColourData.flip();
         // Calculate the size of the FloatBuffer in bytes.
         int vertexColourDataSize = /* amount of elements */ 4 * /* amount of components */ 3 * /* size of float */ 4;
         // Allocate enough size in vbo to support the vertexPositionData and colourPositionData FloatBuffers.
