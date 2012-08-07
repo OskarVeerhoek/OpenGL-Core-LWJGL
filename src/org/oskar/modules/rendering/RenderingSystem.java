@@ -261,7 +261,11 @@ public class RenderingSystem implements GameModule {
 
     private void createShaders() {
         gameWorld.debug(RenderingSystem.class, "Creating shaders");
-        // >> TODO: Find docs
+        // >> Vertex shaders are run once for each vertex given to the graphics processor. The
+        // >> purpose is to transform each vertex's 3D position in virtual space to the 2D coordinate
+        // >> at which it appears on the screen (as well as a depth value for the Z-buffer). Vertex shaders
+        // >> can manipulate properties such as position, color, and texture coordinate, but cannot create new vertices.
+        // >> The output of the vertex shader goes to the fragment shader. Source: Wikipedia
         // Create the vertex shader.
         vertexShader = glCreateShader(GL_VERTEX_SHADER);
         // Supply the source code for the shader.
@@ -273,7 +277,8 @@ public class RenderingSystem implements GameModule {
             // Print the shader error log.
             gameWorld.fatal(RenderingSystem.class, "OpenGL vertex shader info log: " + glGetShaderInfoLog(vertexShader, 2056));
         }
-        // // TODO: Find docs
+        // >> Fragment shaders compute color and other attributes of a pixel.
+        // >> Source: Wikipedia
         // Create the fragment shader.
         fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
         // Supply the source code for the shader.
@@ -285,16 +290,17 @@ public class RenderingSystem implements GameModule {
             // Print the shader error log.
             gameWorld.fatal(RenderingSystem.class, "OpenGL fragment shader info log: " + glGetShaderInfoLog(fragmentShader, 2056));
         }
-        // >> TODO: Find docs
-        // Create the shader program.
+        // Create the shader program that glues the vertex shader and the fragment shader
+        // together.
         shaderProgram = glCreateProgram();
-        // >> TODO: Find docs
-        // >> The shader program consists of two shaders, the vertex shader and the fragment shader.
-        // >> You need to attach these shaders to the shader program in order for it to work.
-        // Attach the shaders to the shader program.
+        // Attach the vertex shader to the shader program.
         glAttachShader(shaderProgram, vertexShader);
+        // Attach the fragment shader to the shader program.
         glAttachShader(shaderProgram, fragmentShader);
-        // >> TODO: Find docs
+        // >> glLinkProgram links the program object specified by program. If any shader objects of type GL_VERTEX_SHADER are
+        // >> attached to program, they will be used to create an executable that will run on the programmable vertex processor.
+        // >> If any shader objects of type GL_FRAGMENT_SHADER are attached to program, they will be used to create an
+        // >> executable that will run on the programmable fragment processor.
         glLinkProgram(shaderProgram);
         // Check if the shader program was linked correctly.
         if (glGetProgram(shaderProgram, GL_LINK_STATUS) == GL_FALSE) {
