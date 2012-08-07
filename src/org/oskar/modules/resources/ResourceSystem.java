@@ -87,18 +87,15 @@
 
 package org.oskar.modules.resources;
 
-import de.matthiasmann.twl.utils.PNGDecoder;
-import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL11;
 import org.oskar.modules.GameModule;
 import org.oskar.world.GameWorld;
 
-import java.io.*;
-import java.nio.ByteBuffer;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
-import static org.lwjgl.opengl.GL11.*;
 
 /**
  * @author Oskar Veerhoek

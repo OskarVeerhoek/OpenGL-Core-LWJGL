@@ -87,13 +87,11 @@
 
 package org.oskar.world;
 
-import org.apache.log4j.*;
-import org.apache.log4j.xml.DOMConfigurator;
+import org.apache.log4j.Logger;
 import org.oskar.modules.file.FileSystem;
 import org.oskar.modules.rendering.RenderingSystem;
 import org.oskar.modules.resources.ResourceSystem;
 import org.oskar.modules.window.WindowingSystem;
-import org.w3c.dom.DOMConfiguration;
 
 import java.util.HashMap;
 import java.util.Map;

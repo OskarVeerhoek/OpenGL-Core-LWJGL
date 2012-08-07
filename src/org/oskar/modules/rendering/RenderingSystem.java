@@ -91,14 +91,10 @@ import org.lwjgl.BufferUtils;
 import org.oskar.modules.GameModule;
 import org.oskar.world.GameWorld;
 
-import java.io.File;
-import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-import java.nio.ShortBuffer;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL13.*;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
