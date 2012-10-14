@@ -52,11 +52,11 @@ public class RenderingSystem implements GameModule {
     /**
      * The vertex attribute position for the vertex position.
      */
-    private final int VERTEX_POSITION = 0;
+    private int VERTEX_POSITION;
     /**
      * The vertex attribute position for the vertex colour.
      */
-    private final int VERTEX_COLOUR = 1;
+    private int VERTEX_COLOUR;
     /**
      * The vertex buffer object which will contain the vertex position
      * and vertex colour data.
@@ -266,6 +266,8 @@ public class RenderingSystem implements GameModule {
             // Print the shader program error log.
             gameWorld.fatal(RenderingSystem.class, "OpenGL shader program info log: " + glGetProgramInfoLog(shaderProgram, 2056));
         }
+        VERTEX_POSITION = glGetAttribLocation(shaderProgram, "vertex_position");
+        VERTEX_COLOUR = glGetAttribLocation(shaderProgram, "vertex_colour");
         checkForErrors();
     }
 
