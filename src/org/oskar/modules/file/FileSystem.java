@@ -32,6 +32,11 @@ package org.oskar.modules.file;
 import org.oskar.modules.GameModule;
 import org.oskar.world.GameWorld;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+
 /**
  * @author Oskar Veerhoek
  */
@@ -39,6 +44,23 @@ public class FileSystem implements GameModule {
     private GameWorld gameWorld;
 
     public FileSystem() {}
+
+    public String loadFileToString(File file) {
+        gameWorld.debug(FileSystem.class, "Loading " + file.toString() + " to string");
+        StringBuilder fileSource = new StringBuilder();
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(
+                    file));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                fileSource.append(line).append('\n');
+            }
+            reader.close();
+        } catch (IOException e) {
+            gameWorld.fatal(FileSystem.class, e);
+        }
+        return fileSource.toString();
+    }
 
     @Override
     public void create(GameWorld gameWorld) {

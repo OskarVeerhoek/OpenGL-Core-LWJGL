@@ -32,10 +32,7 @@ package org.oskar.modules.resources;
 import org.oskar.modules.GameModule;
 import org.oskar.world.GameWorld;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,29 +48,12 @@ public class ResourceSystem implements GameModule {
         return textFiles.get(key);
     }
 
-    public String loadFileToString(File file) {
-        gameWorld.debug(ResourceSystem.class, "Loading " + file.toString() + " to string");
-        StringBuilder fileSource = new StringBuilder();
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(
-                    file));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                fileSource.append(line).append('\n');
-            }
-            reader.close();
-        } catch (IOException e) {
-            gameWorld.fatal(ResourceSystem.class, e);
-        }
-        return fileSource.toString();
-    }
-
     @Override
     public void create(GameWorld gameWorld) {
         gameWorld.info(ResourceSystem.class, "Creating resource system");
         this.gameWorld = gameWorld;
-        textFiles.put("RESOURCE_VERTEX_SHADER", loadFileToString(new File(gameWorld.getStringProperty("RESOURCE_VERTEX_SHADER"))));
-        textFiles.put("RESOURCE_FRAGMENT_SHADER", loadFileToString(new File(gameWorld.getStringProperty("RESOURCE_FRAGMENT_SHADER"))));
+        textFiles.put("RESOURCE_VERTEX_SHADER", gameWorld.getFileSystem().loadFileToString(new File(gameWorld.getStringProperty("RESOURCE_VERTEX_SHADER"))));
+        textFiles.put("RESOURCE_FRAGMENT_SHADER", gameWorld.getFileSystem()..loadFileToString(new File(gameWorld.getStringProperty("RESOURCE_FRAGMENT_SHADER"))));
         gameWorld.info(ResourceSystem.class, "Done creating resource system");
     }
 
