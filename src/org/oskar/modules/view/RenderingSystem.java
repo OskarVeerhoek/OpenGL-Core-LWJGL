@@ -27,7 +27,7 @@
  * either expressed or implied, of the FreeBSD Project.
  */
 
-package org.oskar.modules.rendering;
+package org.oskar.modules.view;
 
 import org.lwjgl.BufferUtils;
 import org.oskar.modules.GameModule;

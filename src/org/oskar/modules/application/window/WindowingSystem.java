@@ -27,7 +27,7 @@
  * either expressed or implied, of the FreeBSD Project.
  */
 
-package org.oskar.modules.window;
+package org.oskar.modules.application.window;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.*;

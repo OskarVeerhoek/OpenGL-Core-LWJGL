@@ -27,7 +27,7 @@
  * either expressed or implied, of the FreeBSD Project.
  */
 
-package org.oskar.modules.file;
+package org.oskar.modules.application.file;
 
 import org.oskar.modules.GameModule;
 import org.oskar.world.GameWorld;
