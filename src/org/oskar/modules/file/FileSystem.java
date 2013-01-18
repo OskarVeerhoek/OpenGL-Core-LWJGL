@@ -45,7 +45,7 @@ public class FileSystem implements GameModule {
 
     public FileSystem() {}
 
-    public String loadFileToString(File file) {
+    public String loadFileToString(File file, boolean addNewline) {
         gameWorld.debug(FileSystem.class, "Loading " + file.toString() + " to string");
         StringBuilder fileSource = new StringBuilder();
         try {
@@ -53,7 +53,10 @@ public class FileSystem implements GameModule {
                     file));
             String line;
             while ((line = reader.readLine()) != null) {
-                fileSource.append(line).append('\n');
+                if (addNewline)
+                    fileSource.append(line).append('\n');
+                else
+                    fileSource.append(line);
             }
             reader.close();
         } catch (IOException e) {

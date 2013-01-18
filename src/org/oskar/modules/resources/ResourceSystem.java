@@ -33,6 +33,7 @@ import org.oskar.modules.GameModule;
 import org.oskar.world.GameWorld;
 
 import java.io.File;
+import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,17 +44,30 @@ public class ResourceSystem implements GameModule {
 
     private GameWorld gameWorld;
     private Map<String, String> textFiles = new HashMap<String, String>();
+    private Map<String, ByteBuffer> textureFiles = new HashMap<String, ByteBuffer>();
 
+    /**
+     * @param key the key of the text file
+     * @return the string contents of the stored text file, or null if the key does not exist
+     */
     public String getTextFileContent(String key) {
         return textFiles.get(key);
+    }
+
+    /**
+     * @param key the key of the text file
+     * @return the ByteBuffer contents of the stored texture, or null if the key does not exist
+     */
+    public ByteBuffer getTextureContent(String key) {
+        return textureFiles.get(key);
     }
 
     @Override
     public void create(GameWorld gameWorld) {
         gameWorld.info(ResourceSystem.class, "Creating resource system");
         this.gameWorld = gameWorld;
-        textFiles.put("RESOURCE_VERTEX_SHADER", gameWorld.getFileSystem().loadFileToString(new File(gameWorld.getStringProperty("RESOURCE_VERTEX_SHADER"))));
-        textFiles.put("RESOURCE_FRAGMENT_SHADER", gameWorld.getFileSystem()..loadFileToString(new File(gameWorld.getStringProperty("RESOURCE_FRAGMENT_SHADER"))));
+        textFiles.put("RESOURCE_VERTEX_SHADER", gameWorld.getFileSystem().loadFileToString(new File(gameWorld.getStringProperty("RESOURCE_VERTEX_SHADER")), true));
+        textFiles.put("RESOURCE_FRAGMENT_SHADER", gameWorld.getFileSystem().loadFileToString(new File(gameWorld.getStringProperty("RESOURCE_FRAGMENT_SHADER")), true));
         gameWorld.info(ResourceSystem.class, "Done creating resource system");
     }
 
