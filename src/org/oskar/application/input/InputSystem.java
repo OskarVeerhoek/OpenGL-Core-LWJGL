@@ -29,6 +29,9 @@
 
 package org.oskar.application.input;
 
+import net.java.games.input.Component;
+import net.java.games.input.Controller;
+import net.java.games.input.ControllerEnvironment;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.util.vector.Vector2f;
@@ -37,12 +40,27 @@ import org.oskar.GameWorld;
 
 public class InputSystem implements GameModule {
     private GameWorld gameWorld;
+    private Controller gamepad;
 
     @Override
     public void create(GameWorld gameWorld) {
         this.gameWorld = gameWorld;
         gameWorld.info(InputSystem.class, "Creating input system");
+        for (Controller c : ControllerEnvironment.getDefaultEnvironment().getControllers()) {
+            if (c.getType() == Controller.Type.GAMEPAD) {
+                gamepad = c;
+                gameWorld.debug(InputSystem.class, "Found gamepad " + gamepad);
+            }
+        }
         gameWorld.info(InputSystem.class, "Done creating input system");
+    }
+
+    public boolean isButtonPressed(GamepadButton button) {
+        return gamepad.getComponent(button.getIdentifier()).getPollData() == 1;
+    }
+
+    public boolean areControllersFound() {
+        return gamepad == null;
     }
 
     public String keyToString(int key) {
@@ -62,6 +80,7 @@ public class InputSystem implements GameModule {
     }
 
     public void update() {
+        gamepad.poll();
         while (Keyboard.next()) {
             if (Keyboard.getEventKeyState()) {
                 gameWorld.getLogicSystem().sendKeyInput(Keyboard.getEventKey());
