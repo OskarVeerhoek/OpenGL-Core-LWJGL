@@ -27,12 +27,12 @@
  * either expressed or implied, of the FreeBSD Project.
  */
 
-package org.oskar.modules.application.window;
+package org.oskar.application.window;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.*;
-import org.oskar.modules.GameModule;
-import org.oskar.world.GameWorld;
+import org.oskar.GameModule;
+import org.oskar.GameWorld;
 
 /**
  * Handling all the rendering.

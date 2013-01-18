@@ -27,10 +27,10 @@
  * either expressed or implied, of the FreeBSD Project.
  */
 
-package org.oskar.modules.application.resources;
+package org.oskar.application.resources;
 
-import org.oskar.modules.GameModule;
-import org.oskar.world.GameWorld;
+import org.oskar.GameModule;
+import org.oskar.GameWorld;
 
 import java.io.File;
 import java.nio.ByteBuffer;

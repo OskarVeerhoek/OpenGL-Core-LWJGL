@@ -27,27 +27,19 @@
  * either expressed or implied, of the FreeBSD Project.
  */
 
-package org.oskar.modules;
+package org.oskar.application;
 
-import org.oskar.world.GameWorld;
+import org.oskar.GameWorld;
 
 /**
  * @author Oskar Veerhoek
  */
-public interface GameModule {
-    /**
-     * Creates the module in the specified game world.
-     * @param gameWorld the game world
-     */
-    public void create(GameWorld gameWorld);
-
-    /**
-     * Destroys the module.
-     */
-    public void destroy();
-
-    /**
-     * @return the game world in which the module was created
-     */
-    public GameWorld getGameWorld();
+public class Main {
+    public static void main(String args[]) {
+        GameWorld gameWorld = new GameWorld();
+        gameWorld.create();
+        gameWorld.run();
+        gameWorld.destroy();
+        System.exit(0);
+    }
 }

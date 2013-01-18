@@ -27,11 +27,11 @@
  * either expressed or implied, of the FreeBSD Project.
  */
 
-package org.oskar.modules.view;
+package org.oskar.view;
 
 import org.lwjgl.BufferUtils;
-import org.oskar.modules.GameModule;
-import org.oskar.world.GameWorld;
+import org.oskar.GameModule;
+import org.oskar.GameWorld;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -57,6 +57,8 @@ public class RenderingSystem implements GameModule {
      * The vertex attribute position for the vertex colour.
      */
     private int VERTEX_COLOUR;
+    private int biasLocation;
+    private float biasX = 1, biasY = 1, biasZ = 1;
     /**
      * The vertex buffer object which will contain the vertex position
      * and vertex colour data.
@@ -83,9 +85,17 @@ public class RenderingSystem implements GameModule {
      * The shader program that will glue the vertex shader and the fragment shader together.
      */
     private int shaderProgram;
+    /**
+     * Whether the rendering system is currently drawing.
+     */
+    private boolean isDrawing = true;
 
     public RenderingSystem() {
 
+    }
+
+    public void setIsDrawing(boolean isDrawing) {
+        this.isDrawing = isDrawing;
     }
 
     /**
@@ -113,6 +123,12 @@ public class RenderingSystem implements GameModule {
                 gameWorld.error(RenderingSystem.class, "OpenGL error: GL_OUT_OF_MEMORY");
                 break;
         }
+    }
+
+    public void setBias(float x, float y, float z) {
+        this.biasX = x;
+        this.biasY = y;
+        this.biasZ = z;
     }
 
     private void createBuffers() {
@@ -268,6 +284,7 @@ public class RenderingSystem implements GameModule {
         }
         VERTEX_POSITION = glGetAttribLocation(shaderProgram, "vertex_position");
         VERTEX_COLOUR = glGetAttribLocation(shaderProgram, "vertex_colour");
+        biasLocation = glGetUniformLocation(shaderProgram, "bias");
         checkForErrors();
     }
 
@@ -301,8 +318,8 @@ public class RenderingSystem implements GameModule {
 
     @Override
     public void create(GameWorld gameWorld) {
-        gameWorld.info(RenderingSystem.class, "Creating rendering system");
         this.gameWorld = gameWorld;
+        gameWorld.info(RenderingSystem.class, "Creating rendering system");
         gameWorld.debug(RenderingSystem.class, "Checking OpenGL version");
         double openglVersion = Double.parseDouble(glGetString(GL_VERSION).substring(0, 3));
         if (openglVersion >= 3.0) {
@@ -329,12 +346,17 @@ public class RenderingSystem implements GameModule {
     }
 
     public void update() {
-        // Clear the screen.
-        glClear(GL_COLOR_BUFFER_BIT);
+        if (!isDrawing) {
+            // Clear the screen.
+            glClear(GL_COLOR_BUFFER_BIT);
+            checkForErrors();
+            return;
+        }
         // Bind the vertex array object so we can use the VertexAttribPointer calls.
         glBindVertexArray(vao);
         // Bind the shader program so we can use the shaders.
         glUseProgram(shaderProgram);
+        glUniform4f(biasLocation, biasX, biasY, biasZ, 1);
         // Bind the index buffer object so we can the indices we supplied with DrawElements.
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
         // Draw the two triangles.

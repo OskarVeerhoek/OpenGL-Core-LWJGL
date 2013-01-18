@@ -27,13 +27,15 @@
  * either expressed or implied, of the FreeBSD Project.
  */
 
-package org.oskar.world;
+package org.oskar;
 
 import org.apache.log4j.Logger;
-import org.oskar.modules.file.FileSystem;
-import org.oskar.modules.rendering.RenderingSystem;
-import org.oskar.modules.resources.ResourceSystem;
-import org.oskar.modules.window.WindowingSystem;
+import org.oskar.application.file.FileSystem;
+import org.oskar.application.input.InputSystem;
+import org.oskar.logic.LogicSystem;
+import org.oskar.view.RenderingSystem;
+import org.oskar.application.resources.ResourceSystem;
+import org.oskar.application.window.WindowingSystem;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -49,7 +51,8 @@ public class GameWorld {
     private RenderingSystem renderingSystem = new RenderingSystem();
     private FileSystem fileSystem = new FileSystem();
     private ResourceSystem resourceSystem = new ResourceSystem();
-    private Properties properties = new Properties();
+    private LogicSystem logicSystem = new LogicSystem();
+    private InputSystem inputSystem = new InputSystem();
     private Map<String, String> stringProperties = new HashMap<String, String>();
     private Map<String, Integer> integerProperties = new HashMap<String, Integer>();
     private boolean isCreated = false;
@@ -59,7 +62,7 @@ public class GameWorld {
         this.flaggedForDestruction.set(value);
     }
 
-    public boolean getFlaggedForDestruction() {
+    public boolean isFlaggedForDestruction() {
         return flaggedForDestruction.get();
     }
 
@@ -75,6 +78,8 @@ public class GameWorld {
      */
     public void destroy() {
         info(GameWorld.class, "Destroying game world");
+        inputSystem.destroy();
+        logicSystem.destroy();
         renderingSystem.destroy();
         windowingSystem.destroy();
         resourceSystem.destroy();
@@ -188,6 +193,8 @@ public class GameWorld {
         resourceSystem.create(this);
         windowingSystem.create(this);
         renderingSystem.create(this);
+        logicSystem.create(this);
+        inputSystem.create(this);
         info(GameWorld.class, "Done creating game world");
     }
 
@@ -227,6 +234,14 @@ public class GameWorld {
         return renderingSystem;
     }
 
+    public LogicSystem getLogicSystem() {
+        return logicSystem;
+    }
+
+    public InputSystem getInputSystem() {
+        return inputSystem;
+    }
+
     public FileSystem getFileSystem() {
         return fileSystem;
     }
@@ -237,6 +252,8 @@ public class GameWorld {
 
     public void run() {
         while (!flaggedForDestruction.get()) {
+            inputSystem.update();
+            logicSystem.update();
             renderingSystem.update();
             windowingSystem.update();
         }
