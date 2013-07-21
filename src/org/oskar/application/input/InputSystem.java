@@ -80,7 +80,9 @@ public class InputSystem implements GameModule {
     }
 
     public void update() {
-        gamepad.poll();
+        if (gamepad != null) {
+            gamepad.poll();
+        }
         while (Keyboard.next()) {
             if (Keyboard.getEventKeyState()) {
                 gameWorld.getLogicSystem().sendKeyInput(Keyboard.getEventKey());
