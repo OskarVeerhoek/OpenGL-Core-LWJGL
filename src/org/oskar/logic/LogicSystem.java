@@ -34,7 +34,6 @@ import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 import org.oskar.GameModule;
 import org.oskar.GameWorld;
-import org.oskar.application.input.GamepadButton;
 
 public class LogicSystem implements GameModule {
     private GameWorld gameWorld;
@@ -79,12 +78,6 @@ public class LogicSystem implements GameModule {
         bias.x = mousePosition.x / gameWorld.getIntegerProperty("WINDOW_WIDTH");
         bias.y = mousePosition.y / gameWorld.getIntegerProperty("WINDOW_HEIGHT");
         bias.z = (bias.x + bias.y) / 2;
-        if (gameWorld.getInputSystem().isButtonPressed(GamepadButton.LB)) {
-            bias.scale(0.8f);
-        }
-        if (gameWorld.getInputSystem().isButtonPressed(GamepadButton.RB)) {
-            bias.scale(1.25f);
-        }
         gameWorld.getRenderingSystem().setBias(bias.x, bias.y, bias.z);
     }
 
