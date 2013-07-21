@@ -248,7 +248,7 @@ public class RenderingSystem implements GameModule {
         // Compile the shader.
         glCompileShader(vertexShader);
         // Check if the shader was compiled successfully.
-        if (glGetShader(vertexShader, GL_COMPILE_STATUS) == GL_FALSE) {
+        if (glGetShaderi(vertexShader, GL_COMPILE_STATUS) == GL_FALSE) {
             // Print the shader error log.
             gameWorld.fatal(RenderingSystem.class, "OpenGL vertex shader info log: " + glGetShaderInfoLog(vertexShader, 2056));
         }
@@ -261,7 +261,7 @@ public class RenderingSystem implements GameModule {
         // Compile the shader.
         glCompileShader(fragmentShader);
         // Check if the shader was compiled correctly.
-        if (glGetShader(fragmentShader, GL_COMPILE_STATUS) == GL_FALSE) {
+        if (glGetShaderi(fragmentShader, GL_COMPILE_STATUS) == GL_FALSE) {
             // Print the shader error log.
             gameWorld.fatal(RenderingSystem.class, "OpenGL fragment shader info log: " + glGetShaderInfoLog(fragmentShader, 2056));
         }
@@ -278,7 +278,7 @@ public class RenderingSystem implements GameModule {
         // >> executable that will run on the programmable fragment processor.
         glLinkProgram(shaderProgram);
         // Check if the shader program was linked correctly.
-        if (glGetProgram(shaderProgram, GL_LINK_STATUS) == GL_FALSE) {
+        if (glGetProgrami(shaderProgram, GL_LINK_STATUS) == GL_FALSE) {
             // Print the shader program error log.
             gameWorld.fatal(RenderingSystem.class, "OpenGL shader program info log: " + glGetProgramInfoLog(shaderProgram, 2056));
         }
